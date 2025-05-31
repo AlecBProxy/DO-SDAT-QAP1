@@ -92,6 +92,7 @@ public class LeagueManagerTest {
         assertEquals(1, results.size());
         assertTrue(results.contains(player2));
 
+        //Testing of partial search
         results = league.searchPlayersByName("Joh");
         assertEquals(1, results.size());
         assertTrue(results.contains(player2));
