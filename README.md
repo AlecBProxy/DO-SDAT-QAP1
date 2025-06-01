@@ -46,6 +46,36 @@ The application follows a clean, object-oriented design with the following class
 
 ---
 
+## Running the Application
+
+### Method 1: IntelliJ IDEA (Recommended)
+1. **Open the project** in IntelliJ IDEA
+2. **Navigate** to `src/main/java/com/sportsleague/LeagueManagerCLI.java`
+3. **Right-click** on the `LeagueManagerCLI.java` file in the editor
+4. **Select** "Run 'LeagueManagerCLI.main()'" from the context menu
+   - *Alternatively, click the green play button (▶️) next to the `main` method*
+   - *Or use the keyboard shortcut: Ctrl+Shift+F10 (Windows/Linux) or Cmd+Shift+R (Mac)*
+
+### Method 2: Maven Command Line
+```bash
+# Navigate to project directory
+cd sports-league-manager
+
+# Compile and run
+mvn compile exec:java
+```
+
+### Method 3: Command Line (After Building)
+```bash
+# Build the project
+mvn clean package
+
+# Run the JAR file
+java -cp target/sports-league-manager-1.0-SNAPSHOT.jar com.sportsleague.LeagueManagerCLI
+```
+
+---
+
 ## Clean Code Practices
 
 ### Example 1: Meaningful Method Names and Single Responsibility
