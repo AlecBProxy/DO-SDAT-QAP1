@@ -3,10 +3,11 @@
 ## Table of Contents
 1. [Project Overview](#project-overview)
 2. [How It Works](#how-it-works)
-3. [Clean Code Practices](#clean-code-practices)
-4. [Test Cases](#test-cases)
-5. [Dependencies and Build Configuration](#dependencies-and-build-configuration)
-6. [Maven Plugins Explanation](#maven-plugins-explanation)
+3. [Running The Application](#running-the-application)
+4. [Clean Code Practices](#clean-code-practices)
+5. [Test Cases](#test-cases)
+6. [Dependencies and Build Configuration](#dependencies-and-build-configuration)
+7. [Maven Plugins Explanation](#maven-plugins-explanation)
 
 ---
 
