@@ -105,7 +105,7 @@ public class LeagueManagerCLI {
             System.out.println("Team registered successfully!");
             System.out.println(team);
         } else {
-            System.out.println("Error: Failed to register team. Team name already exists.");
+            System.out.println("Error: Failed to register team. Team name already exists, or non-alphanumeric characters (besides '.-) have been used.");
         }
     }
 
