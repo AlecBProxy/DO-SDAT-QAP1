@@ -168,54 +168,130 @@ private void registerTeam() {
 ## Test Cases
 
 ### Unit Test Strategy
-The project uses JUnit 5 for comprehensive testing of all business logic components. Here are the key test categories:
+The project uses JUnit 5 for comprehensive testing of all business logic components. The testing approach combines multiple related assertions within individual test methods to validate complete workflows.
 
 #### LeagueManager Test Cases
+
 1. **Team Registration Tests**
-   - `testRegisterTeam_Success()`: Validates successful team registration
-   - `testRegisterTeam_DuplicateName()`: Ensures duplicate team names are rejected
-   - `testFindTeamById()`: Tests team retrieval by ID
-   - `testFindTeamByName()`: Tests case-insensitive team name search
+   - `testTeamRegistration()`: Comprehensive test that validates:
+     - Successful team registration with proper ID assignment
+     - Team name and city assignment
+     - Total team count tracking
+     - Prevention of duplicate team registration (returns null for duplicates)
 
-2. **Player Management Tests**
-   - `testRegisterPlayer()`: Validates player registration
-   - `testFindPlayerById()`: Tests player retrieval
-   - `testSearchPlayersByName()`: Tests partial name matching
+2. **Player Management and Assignment Tests**
+   - `testPlayerRegistrationAndAssignment()`: Validates the complete player lifecycle:
+     - Player registration with proper ID assignment
+     - Total player count tracking
+     - Initial unassigned state verification
+     - Successful player-to-team assignment
+     - Assignment state updates (player and team)
+     - Assigned player count tracking
+     - Error handling for invalid team/player IDs
 
-3. **Assignment Logic Tests**
-   - `testAssignPlayerToTeam_Success()`: Tests successful player assignment
-   - `testAssignPlayerToTeam_PlayerAlreadyAssigned()`: Prevents double assignment
-   - `testRemovePlayerFromTeam()`: Tests player removal functionality
+3. **Player Removal Tests**
+   - `testPlayerRemovalFromTeam()`: Tests player removal workflow:
+     - Player assignment verification
+     - Team player count before removal
+     - Successful removal operation
+     - State cleanup after removal
+
+4. **Search Functionality Tests**
+   - `testSearchFunctionality()`: Comprehensive search testing:
+     - Exact first name matching
+     - Exact last name matching
+     - Partial name matching
+     - Case-insensitive search
+     - Empty results for non-existent players
+
+5. **Unassigned Player Tracking Tests**
+   - `testUnassignedPlayersTracking()`: Validates unassigned player management:
+     - Initial unassigned player list
+     - List updates after player assignments
+     - Complete assignment scenario (empty unassigned list)
+
+6. **League Statistics Tests**
+   - `testLeagueStatistics()`: Tests statistical tracking:
+     - Initial empty league state
+     - Team and player count updates
+     - Assigned player count tracking
+     - Statistics accuracy after various operations
 
 #### Team Class Test Cases
-1. **Roster Management Tests**
-   - `testAddPlayer_Success()`: Validates player addition
-   - `testAddPlayer_TeamFull()`: Tests maximum capacity enforcement
-   - `testRemovePlayer()`: Tests player removal from roster
+
+1. **Team Creation Tests**
+   - `testTeamCreation()`: Validates initial team state:
+     - Team ID, name, and city assignment
+     - Initial player count (zero)
+     - Team capacity status
+
+2. **Player Addition Tests**
+   - `testAddPlayerToTeam()`: Tests successful player addition:
+     - Player assignment state before/after
+     - Team player count updates
+     - Player team ID assignment
+     - Roster inclusion verification
+
+3. **Duplicate Assignment Prevention Tests**
+   - `testCannotAddPlayerAlreadyAssigned()`: Ensures:
+     - Already assigned players cannot be re-added
+     - Player count remains unchanged on failed addition
 
 #### Player Class Test Cases
-1. **State Management Tests**
-   - `testPlayerCreation()`: Validates initial player state
-   - `testTeamAssignment()`: Tests team assignment tracking
 
-### Example Test Implementation
+1. **Player Creation Tests**
+   - `testPlayerCreation()`: Validates initial player state:
+     - Player ID, name, and position assignment
+     - Initial unassigned state (teamId = -1)
+     - Assignment status verification
+
+2. **Team Assignment Tests**
+   - `testPlayerTeamAssignment()`: Tests assignment state management:
+     - Initial unassigned state
+     - Team ID assignment
+     - Assignment status update
+
+### Test Implementation Example
+
 ```java
 @Test
-void testAssignPlayerToTeam_Success() {
-    // Arrange
-    Team team = leagueManager.registerTeam("Eagles", "Philadelphia");
-    Player player = leagueManager.registerPlayer("John", "Doe", "Forward");
-    
-    // Act
-    boolean result = leagueManager.assignPlayerToTeam(player.getPlayerId(), team.getTeamId());
-    
-    // Assert
-    assertTrue(result);
-    assertTrue(player.isAssignedToTeam());
-    assertEquals(team.getTeamId(), player.getTeamId());
+public void testPlayerRegistrationAndAssignment() {
+    Team team = league.registerTeam("Raptors", "Toronto");
+    Player player1 = league.registerPlayer("Kyle", "Lowry", "Point Guard");
+    Player player2 = league.registerPlayer("DeMar", "DeRozan", "Shooting Guard");
+
+    assertNotNull(player1);
+    assertNotNull(player2);
+    assertEquals(1, player1.getPlayerId());
+    assertEquals(2, player2.getPlayerId());
+    assertEquals(2, league.getTotalPlayers());
+    assertEquals(0, league.getAssignedPlayers());
+    assertFalse(player1.isAssignedToTeam());
+
+    // Test successful player assignment
+    assertTrue(league.assignPlayerToTeam(player1.getPlayerId(), team.getTeamId()));
+    assertTrue(player1.isAssignedToTeam());
+    assertEquals(team.getTeamId(), player1.getTeamId());
+    assertEquals(1, league.getAssignedPlayers());
     assertEquals(1, team.getPlayerCount());
+
+    // Test error handling
+    assertFalse(league.assignPlayerToTeam(player2.getPlayerId(), 999));
+    assertFalse(league.assignPlayerToTeam(999, team.getTeamId()));
 }
 ```
+
+### Test Coverage Summary
+
+The test suite provides comprehensive coverage of:
+- **Entity Creation**: Team and Player instantiation
+- **Registration Logic**: League management of teams and players
+- **Assignment Workflows**: Player-to-team assignment and removal
+- **Search Capabilities**: Name-based player search with partial matching
+- **State Management**: Tracking assigned/unassigned players
+- **Statistics**: League-wide metrics and counts
+- **Error Handling**: Invalid ID scenarios and duplicate prevention
+- **Data Integrity**: Consistent state across all entities
 
 ---
 
@@ -241,7 +317,7 @@ void testAssignPlayerToTeam_Success() {
 
 **Source**: [Maven Central Repository](https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api)
 
-**Why We Need It**:
+**Purpose**:
 - `junit-jupiter-api`: Provides annotations (`@Test`, `@BeforeEach`, etc.) and assertion methods
 - `junit-jupiter-engine`: Runtime engine that executes JUnit 5 tests
 - `scope>test</scope>`: Dependencies only available during test compilation and execution
