@@ -17,6 +17,10 @@ public class LeagueManager {
     }
 
     public Team registerTeam(String teamName, String city) {
+        if (!isValidTeamName(teamName)) {
+            return null;
+        }
+
         for (Team existingTeam : teams) {
             if (existingTeam.getTeamName().equalsIgnoreCase(teamName)) {
                 return null; // Team name already exists
@@ -132,5 +136,18 @@ public class LeagueManager {
 
     public List<Player> getAllPlayers() {
         return new ArrayList<>(allPlayers);
+    }
+
+    private boolean isValidTeamName(String teamName) {
+        if (teamName == null || teamName.trim().isEmpty()) {
+            return false;
+        }
+
+        String trimmedName = teamName.trim();
+        if (trimmedName.length() < 2 || trimmedName.length() > 50) {
+            return false;
+        }
+
+        return trimmedName.matches("[a-zA-Z0-9\\s'.-]+");
     }
 }
